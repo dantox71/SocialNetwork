@@ -167,7 +167,7 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
 //  @route      PUT api/posts/comment/:post_id
 //  @desc       comment on the post
 //  @access     Private
-//  @return     Created post
+//  @return     Array of comments
 router.put("/comment/:post_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
