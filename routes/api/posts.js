@@ -64,4 +64,27 @@ router.post(
   }
 );
 
+//  @route      DELETE api/posts/:post_Id
+//  @desc       Delete post by id
+//  @access     Private
+//  @return     Delete post
+router.delete("/:post_id", auth, async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.post_id);
+
+    if (!post) {
+      return res.status(400).json({ msg: "There's no post with such id" });
+    }
+
+    res.json(post);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "There's no post with such id" });
+    }
+
+    console.log(err.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 module.exports = router;
