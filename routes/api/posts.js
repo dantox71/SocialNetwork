@@ -13,7 +13,7 @@ const Profile = require("../../models/Profile");
 //  @access     Public
 //  @return     All posts
 router.get("/", async (req, res) => {
-  const posts = await Post.find();
+  const posts = await Post.find().sort({ date: -1 });
 
   res.json(posts);
 });
@@ -44,9 +44,13 @@ router.post(
       const user = await User.findById(req.user.id);
       const profile = await Profile.findOne({ user: req.user.id });
 
+      if (!profile) {
+        return res.status(400).json({ msg: "Profile is required to add post" });
+      }
+
       const post = new Post({
-        text: req.body.text,
         user: req.user.id,
+        text: req.body.text,
         name: user.name,
         avatar: profile.avatar,
         likes: [],
@@ -56,8 +60,9 @@ router.post(
       //Save post in database
       await post.save();
 
-      res.json(post);
+      res.json(profile);
     } catch (err) {
+      console.log("xD");
       console.log(err.message);
       res.status(500).json({ msg: "Server error" });
     }
@@ -67,7 +72,7 @@ router.post(
 //  @route      DELETE api/posts/:post_Id
 //  @desc       Delete post by id
 //  @access     Private
-//  @return     Delete post
+//  @return     Deleted post
 router.delete("/:post_id", auth, async (req, res) => {
   try {
     const post = await Post.findByIdAndDelete(req.params.post_id);
@@ -94,6 +99,7 @@ router.delete("/:post_id", auth, async (req, res) => {
 router.put("/like/:post_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
+    const profile = await Profile.findById(req.user.id);
 
     if (!post) {
       return res.status(404).json({ msg: "Post with this id not found" });
@@ -171,9 +177,8 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
 router.put("/comment/:post_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.post_id);
-    const user = await User.findById(req.user.id);
     const profile = await Profile.findOne({ user: req.user.id });
-
+    const user = await User.findById(req.user.id);
     if (!post) {
       return res.status(404).json({ msg: "Post with this id not found" });
     }
@@ -185,7 +190,8 @@ router.put("/comment/:post_id", auth, async (req, res) => {
     }
 
     const comment = {
-      user: req.user.id,
+      name: user.name,
+      user: profile.user,
       avatar: profile.avatar,
       text: req.body.text
     };
@@ -198,6 +204,44 @@ router.put("/comment/:post_id", auth, async (req, res) => {
   } catch (err) {
     if (err.kind == "ObjectId") {
       return res.status(404).json({ msg: "Post with this id not found" });
+    }
+
+    console.log(err.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+//  @route      PUT api/posts/comment/:post_id/:comment_id
+//  @desc       Delete comment by it's id
+//  @access     Private
+//  @return     Delete comment
+router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post with this id not found" });
+    }
+
+    const removeIndex = post.comments
+      .map(comment => comment._id)
+      .indexOf(req.params.comment_id);
+
+    // Check if authorized to delete comment
+    if (post.comments[removeIndex].user.toString() !== req.user.id) {
+      return res
+        .status(401)
+        .json({ msg: "Not authorized to delete this comment" });
+    }
+
+    post.comments.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res.status(404).json({ msg: "Post or with this id not found" });
     }
 
     console.log(err.message);
