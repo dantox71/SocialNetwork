@@ -87,7 +87,7 @@ router.delete("/:post_id", auth, async (req, res) => {
   }
 });
 
-//  @route      POST api/posts/like/:post_id
+//  @route      PUT api/posts/like/:post_id
 //  @desc       like post
 //  @access     Private
 //  @return     Array of likes on post including new one
@@ -124,7 +124,7 @@ router.put("/like/:post_id", auth, async (req, res) => {
   }
 });
 
-//  @route      POST api/posts/unlike/:post_id
+//  @route      PUT api/posts/unlike/:post_id
 //  @desc       unlike post
 //  @access     Private
 //  @return     Array of likes on post without deleted one
@@ -154,6 +154,47 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
     await post.save();
 
     res.json(post.likes);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res.status(404).json({ msg: "Post with this id not found" });
+    }
+
+    console.log(err.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+//  @route      PUT api/posts/comment/:post_id
+//  @desc       comment on the post
+//  @access     Private
+//  @return     Created post
+router.put("/comment/:post_id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    const user = await User.findById(req.user.id);
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post with this id not found" });
+    }
+
+    if (!profile) {
+      return res
+        .status(404)
+        .json({ msg: "To comment you have to create profile" });
+    }
+
+    const comment = {
+      user: req.user.id,
+      avatar: profile.avatar,
+      text: req.body.text
+    };
+
+    post.comments.unshift(comment);
+
+    await post.save();
+
+    res.json(post.comments);
   } catch (err) {
     if (err.kind == "ObjectId") {
       return res.status(404).json({ msg: "Post with this id not found" });
