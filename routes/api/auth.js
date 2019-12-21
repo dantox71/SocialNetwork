@@ -62,7 +62,7 @@ router.post(
       };
 
       const token = await jwt.sign(payload, config.get("jwtSecret"), {
-        expiresIn: "360000"
+        expiresIn: "360000000000000"
       });
 
       res.json({ token });

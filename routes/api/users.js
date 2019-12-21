@@ -69,14 +69,14 @@ router.post(
 
         config.get("jwtSecret"),
         {
-          expiresIn: "360000"
+          expiresIn: "360000000000000"
         }
       );
 
       res.json({ token });
 
       //Save to database
-      user.save();
+      await user.save();
     } catch (err) {
       console.log(err.message);
       res.status(500).json({ msg: "Server error" });

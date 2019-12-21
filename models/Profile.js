@@ -6,6 +6,10 @@ const ProfileSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId
   },
 
+  avatar: {
+    type: String
+  },
+
   location: {
     type: String
   },
@@ -31,7 +35,7 @@ const ProfileSchema = mongoose.Schema({
       type: String
     },
 
-    instagram: {
+    linkedin: {
       type: String
     }
   },
