@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { store } from "./store";
+import { Provider } from "react-redux";
 import "./App.css";
 
 //Layout
@@ -10,16 +12,18 @@ import Login from "./components/auth/Login";
 
 const App = () => {
   return (
-    <Fragment>
+    <Provider store={store}>
       <Router>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/register" component={Register} />
-        </Switch>
+        <Fragment>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home}></Route>
+            <Route exact path="/login" component={Login}></Route>
+            <Route exact path="/register" component={Register}></Route>
+          </Switch>
+        </Fragment>
       </Router>
-    </Fragment>
+    </Provider>
   );
 };
 
