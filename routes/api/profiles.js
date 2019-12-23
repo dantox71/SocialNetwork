@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth").auth;
 
+//Models
 const User = require("../../models/User");
 const Profile = require("../../models/Profile");
 
@@ -11,7 +12,7 @@ const Profile = require("../../models/Profile");
 //  @return   All profiles
 router.get("/", auth, async (req, res) => {
   try {
-    const profiles = await Profile.find().populate("user", ["name"]);
+    const profiles = await Profile.find().populate("name", ["name"]);
 
     res.json(profiles);
   } catch (err) {
@@ -26,7 +27,10 @@ router.get("/", auth, async (req, res) => {
 //  @return   logged user profile
 router.get("/me", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id });
+    const user = await User.findById(req.user.id);
+    const profile = await Profile.findOne({
+      user: req.user.id
+    }).populate("user", ["name"]);
 
     if (!profile) {
       return res
@@ -98,6 +102,7 @@ router.post("/", auth, async (req, res) => {
       if (linkedin) profile.social.linkedin = linkedin;
 
       profile.save();
+      console.log("Profile edited");
 
       res.json(profile);
     } else {
@@ -134,6 +139,8 @@ router.post("/", auth, async (req, res) => {
 
       //Save profile in database
       await profile.save();
+
+      console.log("New profile added");
 
       res.json(profile);
     }

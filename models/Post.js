@@ -5,7 +5,6 @@ const PostSchema = mongoose.Schema({
     ref: "users",
     type: mongoose.Schema.Types.ObjectId
   },
-
   text: {
     type: String,
     required: true
@@ -33,6 +32,10 @@ const PostSchema = mongoose.Schema({
       user: {
         ref: "users",
         type: mongoose.Schema.Types.ObjectId
+      },
+
+      name: {
+        type: String
       },
 
       avatar: {

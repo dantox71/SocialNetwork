@@ -7,7 +7,9 @@ const ProfileSchema = mongoose.Schema({
   },
 
   avatar: {
-    type: String
+    type: String,
+    default:
+      "https://c8.alamy.com/comp/H8GCMR/user-avatar-icon-sign-symbol-H8GCMR.jpg"
   },
 
   location: {
