@@ -1,14 +1,16 @@
 import axios from "axios";
 import {
   REGISTER_SUCCESS,
+  CLEAR_ERRORS,
   REGISTER_FAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  AUTH_ERROR,
+  AUTH_FAIL,
   USER_LOADED,
   LOGOUT
 } from "./types";
 import setAuthToken from "../utilis/setAuthToken";
+import { setAlert } from "./alert";
 
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
@@ -24,8 +26,7 @@ export const loadUser = () => async dispatch => {
     });
   } catch (err) {
     dispatch({
-      type: AUTH_ERROR,
-      payload: err.response.data.errors
+      type: AUTH_FAIL
     });
   }
 };
@@ -46,6 +47,8 @@ export const register = (name, email, password) => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: res.data //Token
     });
+
+    dispatch(setAlert("Account created", "success"));
 
     dispatch(loadUser());
   } catch (err) {
@@ -73,10 +76,10 @@ export const login = (email, password) => async dispatch => {
       payload: res.data //Token
     });
 
+    dispatch(setAlert("Logged", "success"));
+
     dispatch(loadUser());
   } catch (err) {
-    const errors = err.response.data.errors;
-
     dispatch({
       type: LOGIN_FAIL,
       payload: err.response.data.errors
@@ -85,7 +88,15 @@ export const login = (email, password) => async dispatch => {
 };
 
 export const logout = () => dispatch => {
+  dispatch(setAlert("Logged out", "success"));
+
   dispatch({
     type: LOGOUT
+  });
+};
+
+export const clearErrors = () => dispatch => {
+  dispatch({
+    type: CLEAR_ERRORS
   });
 };

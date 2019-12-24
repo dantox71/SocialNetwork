@@ -50,6 +50,10 @@ input[type="submit"].btn-primary:hover,
   color: #666;
 }
 
+.text-white {
+  color: #fff;
+}
+
 .text-bold {
   font-weight: 900;
 }
@@ -136,6 +140,10 @@ textarea:focus {
   margin-bottom: 2rem;
 }
 
+.p-10 {
+  padding: 10rem;
+}
+
 .d-flex {
   display: flex;
   justify-content: center;
@@ -149,17 +157,23 @@ textarea:focus {
   align-items: center;
 }
 
+.alerts {
+  z-index: 10000;
+  position: fixed;
+  top: 150px;
+  right: 0;
+}
+
 .alert {
+  position: relative;
   z-index: 1000;
   background: #eee;
   color: white;
-  position: fixed;
-  top: 150px;
-  right: -300px;
   padding: 0.5rem 1.5rem;
+  margin: 1rem;
   border-radius: 5px;
   animation-name: show-alert;
-  animation-duration: 1.5s;
+  animation-duration: 2.7s;
   animation-fill-mode: forwards;
 }
 .alert-success {
@@ -172,12 +186,48 @@ textarea:focus {
   background: #d9534f;
 }
 
+.fb {
+  color: #3b5999;
+}
+
+.yt {
+  color: #cd201f;
+}
+
+.linkedin {
+  color: #0077b5;
+}
+
+.instagram {
+  color: #e4405f;
+}
+
 @media (max-width: 500px) {
+  .alerts {
+    top: 60px;
+  }
   .alert {
     top: 50px;
+    font-size: 14px;
+  }
+  .form {
+    margin-top: 25vh;
   }
   .form-group {
-    margin: 0.2rem auto;
+    margin: 0.6rem auto;
+  }
+  .text-lg {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 300px) {
+  .alerts {
+    top: 90px;
+  }
+  .alert {
+    font-size: 10px;
+    padding: 0.2rem 1rem;
   }
 }
 
@@ -185,8 +235,17 @@ textarea:focus {
   0% {
     right: -150px;
   }
+  25% {
+    right: 15px;
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
   100% {
-    right: 30px;
+    opacity: 0;
   }
 }
 
@@ -401,7 +460,7 @@ section#register:before {
   content: "";
   position: absolute;
   top: 0;
-  right: left;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -457,16 +516,6 @@ section#posts {
   width: 100%;
   height: 100%;
   background-image: url("https://images.pexels.com/photos/220067/pexels-photo-220067.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
-}
-section#posts:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  z-index: 0;
-  background: rgba(0, 0, 0, 0.9);
 }
 section#posts .container {
   z-index: 1000;
@@ -612,6 +661,97 @@ section#posts .container a {
 @media (max-width: 400px) {
   .add-comment {
     padding: 0.5rem;
+  }
+}
+
+section#profiles {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://images.pexels.com/photos/220067/pexels-photo-220067.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+}
+section#profiles .container {
+  z-index: 1000;
+  margin-top: 15vh;
+  background: #fff;
+  color: #000;
+}
+section#profiles .container a {
+  color: #9e2a12;
+}
+section#profiles .container {
+  padding-top: 5rem;
+  background: transparent;
+  text-align: center;
+}
+
+.profiles {
+  margin-top: 15vh;
+}
+
+.profile {
+  text-align: left;
+  margin-bottom: 1rem;
+  background: white;
+  border-top: 3px solid #9e2a12;
+  border-bottom: 3px soldi #9e2a12;
+  color: #9e2a12;
+  display: grid;
+  grid-template-areas:
+    "img info links"
+    "img info links"
+    "img info links";
+  align-items: center;
+  justify-content: center;
+}
+.profile .profile-img {
+  grid-area: img;
+  margin-right: 2rem;
+}
+.profile .profile-info {
+  justify-content: center;
+  align-items: center;
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+}
+.profile .profile-social-links {
+  grid-area: links;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+}
+.profile .profile-social-links a {
+  margin: 0 0.5rem;
+}
+.profile img {
+  width: 200px;
+}
+
+@media (max-width: 850px) {
+  .profiles .profile {
+    grid-template-areas:
+      "img info"
+      "img info"
+      "links links";
+  }
+}
+
+@media (max-width: 550px) {
+  .profiles .profile {
+    grid-template-areas:
+      "img img img"
+      "info info info"
+      "links links links";
+  }
+  .profiles .profile .profile-img {
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
 }
 

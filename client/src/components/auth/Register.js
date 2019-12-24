@@ -1,16 +1,29 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { register } from "../../actions/auth";
+import { register, clearErrors } from "../../actions/auth";
+import { setAlert } from "../../actions/alert";
 import PropTypes from "prop-types";
 
-const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
+const Register = ({
+  auth: { isAuthenticated, loading, errors },
+  setAlert,
+  clearErrors,
+  register
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password1: "",
     password2: ""
   });
+
+  useEffect(() => {
+    if (errors) {
+      errors.map(error => setAlert(error.msg, "danger"));
+      clearErrors();
+    }
+  }, errors);
 
   const { name, email, password1, password2 } = formData;
 
@@ -33,9 +46,9 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
 
   const onSubmit = e => {
     if (name == "" || email == "" || password1 == "" || password2 == "") {
-      console.log("Fill in all required fields");
+      setAlert("Fill in all fields", "danger");
     } else if (password1 !== password2) {
-      console.log("Passwords doesnt match");
+      setAlert("Passwords dont match", "danger");
     } else {
       register(name, email, password1);
 
@@ -124,7 +137,9 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
 };
 
 const propTypes = {
+  clearErrors: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.object.isRequired
 };
 
@@ -132,4 +147,6 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { register })(Register);
+export default connect(mapStateToProps, { register, setAlert, clearErrors })(
+  Register
+);

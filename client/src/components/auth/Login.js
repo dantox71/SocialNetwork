@@ -1,14 +1,28 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { login } from "../../actions/auth";
+import { login, clearErrors } from "../../actions/auth";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 
-const Login = ({ login, auth: { isAuthenticated, errors, loading } }) => {
+import PropTypes from "prop-types";
+import { setAlert } from "../../actions/alert";
+
+const Login = ({
+  setAlert,
+  clearErrors,
+  login,
+  auth: { isAuthenticated, errors, loading }
+}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
   });
+
+  useEffect(() => {
+    if (errors) {
+      errors.map(error => setAlert(error.msg, "danger"));
+      clearErrors();
+    }
+  }, [errors]);
 
   const { email, password } = formData;
 
@@ -22,7 +36,7 @@ const Login = ({ login, auth: { isAuthenticated, errors, loading } }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (password === "" || email === "") {
-      console.log("Fill in all required fields");
+      setAlert("Fill in all fields", "danger");
     } else {
       login(email, password);
     }
@@ -86,6 +100,7 @@ const Login = ({ login, auth: { isAuthenticated, errors, loading } }) => {
 };
 
 const propTypes = {
+  clearErrors: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
@@ -94,4 +109,6 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, setAlert, clearErrors })(
+  Login
+);
