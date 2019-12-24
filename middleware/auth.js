@@ -9,8 +9,8 @@ module.exports.auth = function(req, res, next) {
   //Check if no token
   if (!token) {
     return res
-      .status(401)
-      .json({ msg: "Token not found. Authorization denied" });
+      .status(400)
+      .json({ errors: [{ msg: "Token not found. Authorization denied" }] });
   }
 
   try {
@@ -24,6 +24,6 @@ module.exports.auth = function(req, res, next) {
     next();
   } catch (err) {
     console.log(err.message);
-    res.status(401).json({ msg: "Token invalid" });
+    return res.status(400).json({ errors: [{ msg: "Token invalid" }] });
   }
 };
