@@ -9,3 +9,7 @@ export const USER_LOADED = "USER_LOADED";
 export const LOGOUT = "LOGOUT";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const GET_PROFILE = "GET_PROFILE";
+export const GET_PROFILES = "GET_PROFILES";
+export const ADD_PROFILE = "ADD_PROFILE";
+export const PROFILE_ERROR = "PROFILE_ERROR";
