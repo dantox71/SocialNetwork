@@ -5,7 +5,8 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   AUTH_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  LOGOUT
 } from "./types";
 import setAuthToken from "../utilis/setAuthToken";
 
@@ -81,4 +82,10 @@ export const login = (email, password) => async dispatch => {
       payload: err.response.data.errors
     });
   }
+};
+
+export const logout = () => dispatch => {
+  dispatch({
+    type: LOGOUT
+  });
 };
