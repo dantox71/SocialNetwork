@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { register } from "../../actions/auth";
 
@@ -12,6 +12,16 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
   });
 
   const { name, email, password1, password2 } = formData;
+
+  const clearFormData = () => {
+    setFormData({
+      ...formData,
+      name: "",
+      email: "",
+      password1: "",
+      password2: ""
+    });
+  };
 
   const onChange = e => {
     setFormData({
@@ -26,11 +36,18 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
     } else if (password1 !== password2) {
       console.log("Passwords doesnt match");
     } else {
-      register(formData);
+      register(name, email, password1);
+
+      //Clear inputs
+      clearFormData();
     }
 
     e.preventDefault();
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/posts" />;
+  }
 
   return (
     <Fragment>
@@ -41,6 +58,7 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
           <div className="form-group">
             <span className="text-primary">*</span>
             <input
+              value={name}
               name="name"
               onChange={onChange}
               type="text"
@@ -52,9 +70,10 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
           <div className="form-group">
             <span className="text-primary">*</span>
             <input
+              value={email}
               onChange={onChange}
               name="email"
-              type="email"
+              type="text"
               placeholder="Enter your email"
               className="form-input"
             />
@@ -63,6 +82,7 @@ const Register = ({ auth: { isAuthenticated, loading, errors }, register }) => {
           <div className="form-group">
             <span className="text-primary">*</span>
             <input
+              value={password1}
               onChange={onChange}
               name="password1"
               type="password"

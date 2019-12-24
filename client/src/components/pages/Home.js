@@ -1,7 +1,13 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
 
-const Home = props => {
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+const Home = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
+    return <Redirect to="/posts" />;
+  }
+
   return (
     <Fragment>
       <section id="home">
@@ -30,4 +36,8 @@ const Home = props => {
   );
 };
 
-export default Home;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, {})(Home);
