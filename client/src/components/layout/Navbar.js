@@ -14,6 +14,16 @@ const Navbar = ({ auth: { isAuthenticated, user }, logout }) => {
           Home
         </Link>
       </li>
+      <li className="nav-item">
+        <Link to="/register" className="nav-link btn ml-2">
+          Sign Up
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/login" className="nav-link btn ml-2">
+          Sign In
+        </Link>
+      </li>
 
       <li className="nav-item">
         <Link to="/posts" className="nav-link btn ml-2">
