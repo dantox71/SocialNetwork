@@ -2,8 +2,9 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { login } from "../../actions/auth";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = ({ login, auth: { isAuthenticated, errors, loading } }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -84,8 +85,13 @@ const Login = ({ login, isAuthenticated }) => {
   );
 };
 
+const propTypes = {
+  login: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, { login })(Login);

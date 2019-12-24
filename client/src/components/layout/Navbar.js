@@ -2,6 +2,7 @@ import React, { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
+import PropTypes from "prop-types";
 
 const Navbar = ({ isAuthenticated, logout }) => {
   const [menuState, setMenuState] = useState(false);
@@ -78,6 +79,11 @@ const Navbar = ({ isAuthenticated, logout }) => {
       </ul>
     </nav>
   );
+};
+
+const propTypes = {
+  logout: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

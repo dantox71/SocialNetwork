@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Home = ({ isAuthenticated }) => {
+const Home = ({ auth: { isAuthenticated } }) => {
   if (isAuthenticated) {
     return <Redirect to="/posts" />;
   }
@@ -36,8 +37,12 @@ const Home = ({ isAuthenticated }) => {
   );
 };
 
+const propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  auth: state.auth
 });
 
 export default connect(mapStateToProps, {})(Home);
