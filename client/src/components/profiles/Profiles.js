@@ -3,14 +3,22 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getProfiles } from "../../actions/profiles";
 import ProfileItem from "./ProfileItem";
+import { Redirect } from "react-router-dom";
 
-const Profiles = ({ profiles, getProfiles, auth: { user, loading } }) => {
+const Profiles = ({
+  profiles,
+  getProfiles,
+  auth: { user, loading, isAuthenticated }
+}) => {
   useEffect(() => {
     if (user !== null) {
       getProfiles();
     }
   }, [getProfiles, user]);
 
+  if (!isAuthenticated) {
+    return <Redirect to="/" />;
+  }
   return (
     <Fragment>
       <section id="profiles">
