@@ -23,6 +23,22 @@ export const getProfile = () => async dispatch => {
   }
 };
 
+export const getProfiles = () => async dispatch => {
+  try {
+    const res = await axios.get("/api/profiles");
+
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: PROFILE_ERROR
+    });
+  }
+};
+
 export const clearProfile = () => dispatch => {
   dispatch({
     type: CLEAR_PROFILE
