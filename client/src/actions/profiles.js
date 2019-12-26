@@ -4,15 +4,16 @@ import {
   GET_PROFILES,
   ADD_PROFILE,
   PROFILE_ERROR,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  GET_CURRENT_PROFILE
 } from "./types";
 
-export const getProfile = () => async dispatch => {
+export const getCurrentProfile = () => async dispatch => {
   try {
     const res = await axios.get("/api/profiles/me");
 
     dispatch({
-      type: GET_PROFILE,
+      type: GET_CURRENT_PROFILE,
       payload: res.data
     });
   } catch (err) {
@@ -32,7 +33,6 @@ export const getProfiles = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
-    console.log(err);
     dispatch({
       type: PROFILE_ERROR
     });
@@ -43,9 +43,31 @@ export const getProfileById = id => async dispatch => {
   try {
     const res = await axios.get(`/api/profiles/${id}`);
 
-    console.log(res.data);
     dispatch({
       type: GET_PROFILE,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR
+    });
+  }
+};
+
+export const createProfile = formData => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify(formData);
+
+  try {
+    const res = await axios.post("/api/profiles", body, config);
+
+    dispatch({
+      type: ADD_PROFILE,
       payload: res.data
     });
   } catch (err) {

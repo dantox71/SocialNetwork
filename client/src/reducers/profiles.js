@@ -3,12 +3,15 @@ import {
   GET_PROFILES,
   ADD_PROFILE,
   PROFILE_ERROR,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  GET_CURRENT_PROFILE,
+  CLEAR_CURRENT_PROFILE
 } from "../actions/types";
 
 const initialState = {
   profiles: null,
   profile: null,
+  currentProfile: null,
   errors: null
 };
 
@@ -26,6 +29,25 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profiles: payload
+      };
+
+    case GET_CURRENT_PROFILE:
+      return {
+        ...state,
+        currentProfile: payload
+      };
+
+    case CLEAR_CURRENT_PROFILE:
+      return {
+        ...state,
+        currentProfile: null
+      };
+
+    case ADD_PROFILE:
+      return {
+        ...state,
+
+        currentProfile: payload
       };
 
     case PROFILE_ERROR:
