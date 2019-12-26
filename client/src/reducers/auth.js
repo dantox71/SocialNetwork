@@ -27,7 +27,7 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload,
-        errors: payload
+        errors: null
       };
 
     case REGISTER_SUCCESS:

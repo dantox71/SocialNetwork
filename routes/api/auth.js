@@ -12,7 +12,7 @@ const { validationResult, check } = require("express-validator");
 //  @access   Private
 //  @return   User's data
 router.get("/", auth, async (req, res) => {
-  const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id).select("-password");
 
   res.send(user);
 });
@@ -44,7 +44,7 @@ router.post(
 
     //Check if not user
     if (!user) {
-      return res.status(400).json({ msg: "Invalid Credentials" });
+      return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
     }
 
     try {
@@ -52,7 +52,9 @@ router.post(
 
       //Check if passwords doesn't match
       if (!isMatch) {
-        res.status(400).json({ msg: "Invalid Credentials" });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid Credentials" }] });
       }
 
       const payload = {

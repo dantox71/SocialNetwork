@@ -43,7 +43,7 @@ router.post(
 
     //Check if user with given email already exists in database
     if (user) {
-      return res.status(400).json({ msg: "User already exists" });
+      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
     }
 
     try {
@@ -80,7 +80,6 @@ router.post(
       //Save to database
       await user.save();
     } catch (err) {
-      console.log(err.message);
       res.status(500).json({ msg: "Server error" });
     }
   }

@@ -42,6 +42,10 @@ input[type="submit"].btn-primary:hover,
   color: red;
 }
 
+.text-black {
+  color: #000;
+}
+
 .text-primary {
   color: #9e2a12;
 }
@@ -56,6 +60,10 @@ input[type="submit"].btn-primary:hover,
 
 .text-bold {
   font-weight: 900;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-sm {
@@ -114,6 +122,14 @@ textarea:focus {
 
 .mt-2 {
   margin-top: 2rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
 }
 
 .mr-1 {
@@ -700,16 +716,20 @@ section#profiles .container {
   border-bottom: 3px soldi #9e2a12;
   color: #9e2a12;
   display: grid;
+  grid-gap: 2rem;
   grid-template-areas:
-    "img info links"
-    "img info links"
-    "img info links";
+    "profile-top info links"
+    "profile-top info links"
+    "profile-top info links";
   align-items: center;
   justify-content: center;
 }
-.profile .profile-img {
-  grid-area: img;
-  margin-right: 2rem;
+.profiles .profile .profile-top {
+  grid-area: profile-top;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .profile .profile-info {
   justify-content: center;
@@ -729,14 +749,15 @@ section#profiles .container {
   margin: 0 0.5rem;
 }
 .profile img {
-  width: 200px;
+  width: 170px;
+  margin: 1rem 0;
 }
 
 @media (max-width: 850px) {
   .profiles .profile {
     grid-template-areas:
-      "img info"
-      "img info"
+      "profile-top info"
+      "profile-top info"
       "links links";
   }
 }
@@ -744,14 +765,22 @@ section#profiles .container {
 @media (max-width: 550px) {
   .profiles .profile {
     grid-template-areas:
-      "img img img"
+      "profile-top profile-top profile-top"
       "info info info"
       "links links links";
   }
-  .profiles .profile .profile-img {
-    width: 100%;
-    padding: 0;
-    margin: 0;
+  .profiles .profile .profile-top {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-height: 550px) {
+  body {
+    overflow-y: scroll;
+  }
+
+  section#home {
+    padding-top: 12vh;
   }
 }
 

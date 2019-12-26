@@ -7,10 +7,12 @@ import {
   LOGIN_FAIL,
   AUTH_FAIL,
   USER_LOADED,
-  LOGOUT
+  LOGOUT,
+  CLEAR_PROFILE
 } from "./types";
 import setAuthToken from "../utilis/setAuthToken";
 import { setAlert } from "./alert";
+import { store } from "../store";
 
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
@@ -92,6 +94,9 @@ export const logout = () => dispatch => {
 
   dispatch({
     type: LOGOUT
+  });
+  dispatch({
+    type: CLEAR_PROFILE
   });
 };
 

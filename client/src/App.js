@@ -11,7 +11,8 @@ import Navbar from "./components/layout/Navbar";
 import Home from "./components/pages/Home";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Profile from "./components/profile/Profile";
+import Profile from "./components/profiles/Profile";
+import Profiles from "./components/profiles/Profiles";
 
 if (localStorage.token) {
   setAuthToken();
@@ -32,7 +33,8 @@ const App = () => {
             <Route exact path="/" component={Home}></Route>
             <Route exact path="/login" component={Login}></Route>
             <Route exact path="/register" component={Register}></Route>
-            <Route exact path="/profile" component={Profile}></Route>
+            <Route exact path="/profile/:id" component={Profile}></Route>
+            <Route exact path="/profiles" component={Profiles}></Route>
           </Switch>
         </Fragment>
         <Alerts />

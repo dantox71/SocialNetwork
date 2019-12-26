@@ -2,23 +2,24 @@ import React, { Fragment, useEffect } from "react";
 import { Redirect, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getProfile } from "../../actions/profiles";
+import { getProfileById } from "../../actions/profiles";
 import { loadUser } from "../../actions/auth";
 
 const Profile = ({
   profile,
   auth: { isAuthenticated, loading, user },
-  getProfile
+  getProfileById,
+  match
 }) => {
   useEffect(() => {
     if (user !== null) {
-      getProfile();
+      getProfileById(match.params.id);
     }
   }, [user]);
 
-  if (!isAuthenticated) {
-    return <Redirect to="/" />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Redirect to="/x" />;
+  // }
 
   return (
     <Fragment>
@@ -47,9 +48,7 @@ const Profile = ({
                   </div>
 
                   <div class="profile-info">
-                    <a href="profile.html">
-                      <h2>{profile.user.name}</h2>
-                    </a>
+                    <h2>{profile.user.name}</h2>
 
                     <ul>
                       <li>
@@ -93,7 +92,7 @@ const Profile = ({
 Profile.propTypes = {
   auth: PropTypes.object.isRequired,
   profile: PropTypes.object.isRequired,
-  getProfile: PropTypes.func.isRequired,
+  getProfileById: PropTypes.func.isRequired,
   loadUser: PropTypes.func.isRequired
 };
 
@@ -102,4 +101,4 @@ const mapStateToProps = state => ({
   profile: state.profiles.profile
 });
 
-export default connect(mapStateToProps, { getProfile, loadUser })(Profile);
+export default connect(mapStateToProps, { getProfileById, loadUser })(Profile);
