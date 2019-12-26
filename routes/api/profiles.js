@@ -12,7 +12,7 @@ const Profile = require("../../models/Profile");
 //  @return   All profiles
 router.get("/", auth, async (req, res) => {
   try {
-    const profiles = await Profile.find().populate("name", ["name"]);
+    const profiles = await Profile.find().populate("user", ["name"]);
 
     res.json(profiles);
   } catch (err) {
@@ -45,15 +45,40 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-//  @route    GET api/profiles/:profile_id
+//  @route    GET api/profiles/:user_id
 //  @desc     Get profile by user id
 //  @access   Private
 //  @return   profile that match specified id
-router.get("/:user_id", auth, async (req, res) => {
+// router.get("/:user_id", auth, async (req, res) => {
+//   try {
+//     const profile = await Profile.findOne({
+//       user: req.params.user_id
+//     });
+
+//     if (!profile) {
+//       return res.status(404).json({ msg: "No profile for user with such id" });
+//     }
+
+//     res.json(profile);
+//   } catch (err) {
+//     if (err.kind === "ObjectId") {
+//       return res.status(404).json({ msg: "No profile for user with such id" });
+//     }
+
+//     console.log(err.message);
+//     res.status(500).json({ msg: "Server error" });
+//   }
+// });
+
+//  @route    GET api/profiles/:profile_id
+//  @desc     Get profile by it's id
+//  @access   Private
+//  @return   profile that match specified id
+router.get("/:profile_id", auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({
-      user: req.params.user_id
-    });
+    const profile = await Profile.findById(
+      req.params.profile_id
+    ).populate("user", ["name"]);
 
     if (!profile) {
       return res.status(404).json({ msg: "No profile for user with such id" });
