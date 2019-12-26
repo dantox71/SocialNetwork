@@ -1,11 +1,24 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
+import { getProfile } from "../../actions/profiles";
+
 import PropTypes from "prop-types";
 
-const Navbar = ({ auth: { isAuthenticated, user }, logout }) => {
+const Navbar = ({
+  auth: { isAuthenticated, user },
+  logout,
+  getProfile,
+  profile
+}) => {
   const [menuState, setMenuState] = useState(false);
+
+  useEffect(() => {
+    if (user !== null) {
+      getProfile();
+    }
+  }, [user]);
 
   const guestLinks = (
     <Fragment>
@@ -36,14 +49,14 @@ const Navbar = ({ auth: { isAuthenticated, user }, logout }) => {
   const authLinks = (
     <Fragment>
       <li className="nav-item ">
-        <Link to="/profile" className="nav-link btn  ">
-          <img
-            src="https://avatars1.githubusercontent.com/u/53446414?s=460&v=4"
-            alt="User avatar"
-            className="mr-1"
-          />
-          My profile
-        </Link>
+        {profile ? (
+          <Link to={`/profile/${profile._id}`} className="nav-link btn  ">
+            <img src={profile.avatar} alt="User avatar" className="mr-1" />
+            My profile
+          </Link>
+        ) : (
+          <Link to="/create-profile">Create Profile</Link>
+        )}
       </li>
 
       <li className="nav-item">
@@ -93,11 +106,14 @@ const Navbar = ({ auth: { isAuthenticated, user }, logout }) => {
 
 const propTypes = {
   logout: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
+  getProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profiles.profile
 });
 
-export default connect(mapStateToProps, { logout })(Navbar);
+export default connect(mapStateToProps, { logout, getProfile })(Navbar);
