@@ -45,7 +45,9 @@ router.post(
       const profile = await Profile.findOne({ user: req.user.id });
 
       if (!profile) {
-        return res.status(400).json({ msg: "Profile is required to add post" });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Profile is required to add post" }] });
       }
 
       const post = new Post({
@@ -60,10 +62,59 @@ router.post(
       //Save post in database
       await post.save();
 
-      res.json(profile);
+      res.json(post);
     } catch (err) {
-      console.log("xD");
-      console.log(err.message);
+      res.status(500).json({ msg: "Server error" });
+    }
+  }
+);
+
+//  @route      PUT api/posts/:post_id
+//  @desc       edit a post
+//  @access     Private
+//  @return     Updated post
+router.put(
+  "/:post_id",
+  [
+    auth,
+    [
+      check("text", "Text is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    //Check for errors
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const user = await User.findById(req.user.id);
+      const profile = await Profile.findOne({ user: req.user.id });
+      const post = await Post.findById(req.params.post_id);
+
+      if (!profile) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Profile is required to add post" }] });
+      }
+
+      if (!post) {
+        return res.status(404).json({ errors: [{ msg: "Post not found" }] });
+      }
+
+      post.text = req.body.text;
+
+      res.json(post);
+    } catch (err) {
+      if ((err.kind = "ObjectId")) {
+        return res.status(404).json({ errors: [{ msg: "Post not found" }] });
+      }
+
+      console.error(err);
       res.status(500).json({ msg: "Server error" });
     }
   }
@@ -78,16 +129,19 @@ router.delete("/:post_id", auth, async (req, res) => {
     const post = await Post.findByIdAndDelete(req.params.post_id);
 
     if (!post) {
-      return res.status(400).json({ msg: "There's no post with such id" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "There's no post with such id" }] });
     }
 
     res.json(post);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "There's no post with such id" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "There's no post with such id" }] });
     }
 
-    console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
 });
@@ -102,14 +156,18 @@ router.put("/like/:post_id", auth, async (req, res) => {
     const profile = await Profile.findById(req.user.id);
 
     if (!post) {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with such id doesn't exist" }] });
     }
 
     //Check if post has been already liked by logged in user
     if (
       post.likes.filter(like => like.user.toString() === req.user.id).length > 0
     ) {
-      return res.status(400).json({ msg: "Post is already like by this user" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Post is already liked by this user" }] });
     }
 
     //Insert like at the beginning of the array
@@ -119,13 +177,14 @@ router.put("/like/:post_id", auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
+    res.json(post);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with such id doesn't exsit" }] });
     }
 
-    console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
 });
@@ -139,7 +198,9 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
     const post = await Post.findById(req.params.post_id);
 
     if (!post) {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Profile is required to add post" }] });
     }
 
     //Check if post has been already liked by logged in user
@@ -149,7 +210,7 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ msg: "Post hasn't been liked by this user yet" });
+        .json({ errors: [{ msg: "Post hasn't been liked yet" }] });
     }
 
     const removeIndex = post.likes.map(like => like.user).indexOf(req.user.id);
@@ -159,13 +220,14 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
+    res.json(post);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with such id doesn't exist" }] });
     }
 
-    console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
 });
@@ -180,7 +242,9 @@ router.put("/comment/:post_id", auth, async (req, res) => {
     const profile = await Profile.findOne({ user: req.user.id });
     const user = await User.findById(req.user.id);
     if (!post) {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with this id doesn't exist" }] });
     }
 
     if (!profile) {
@@ -203,10 +267,11 @@ router.put("/comment/:post_id", auth, async (req, res) => {
     res.json(post.comments);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with such id not found" }] });
     }
 
-    console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
 });
@@ -229,9 +294,8 @@ router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
 
     // Check if authorized to delete comment
     if (post.comments[removeIndex].user.toString() !== req.user.id) {
-      return res
-        .status(401)
-        .json({ msg: "Not authorized to delete this comment" });
+      return res;
+      return res.status(401).json({ errors: [{ msg: "Not authorized" }] });
     }
 
     post.comments.splice(removeIndex, 1);
@@ -241,10 +305,11 @@ router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
     res.json(post.comments);
   } catch (err) {
     if (err.kind == "ObjectId") {
-      return res.status(404).json({ msg: "Post or with this id not found" });
+      return res
+        .status(400)
+        .json({ errors: [{ msg: "Profile with this id doesn't exist" }] });
     }
 
-    console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
 });
