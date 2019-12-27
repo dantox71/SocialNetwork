@@ -94,7 +94,7 @@ router.put(
     try {
       const user = await User.findById(req.user.id);
       const profile = await Profile.findOne({ user: req.user.id });
-      const post = await Post.findById(req.params.post_id);
+      let post = await Post.findById(req.params.post_id);
 
       if (!profile) {
         return res
@@ -107,6 +107,8 @@ router.put(
       }
 
       post.text = req.body.text;
+
+      post.save();
 
       res.json(post);
     } catch (err) {
