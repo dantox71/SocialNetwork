@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   AUTH_FAIL,
   USER_LOADED,
+  CLEAR_CURRENT_PROFILE,
   LOGOUT,
   CLEAR_PROFILE
 } from "./types";
@@ -96,7 +97,7 @@ export const logout = () => dispatch => {
     type: LOGOUT
   });
   dispatch({
-    type: CLEAR_PROFILE
+    type: CLEAR_CURRENT_PROFILE
   });
 };
 

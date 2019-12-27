@@ -81,13 +81,13 @@ router.get("/:profile_id", auth, async (req, res) => {
     ).populate("user", ["name"]);
 
     if (!profile) {
-      return res.status(404).json({ msg: "No profile for user with such id" });
+      return res.status(404).json({ msg: "No profile for such id" });
     }
 
     res.json(profile);
   } catch (err) {
     if (err.kind === "ObjectId") {
-      return res.status(404).json({ msg: "No profile for user with such id" });
+      return res.status(404).json({ msg: "No profile for  such id" });
     }
 
     console.log(err.message);
@@ -179,7 +179,7 @@ router.post("/", auth, async (req, res) => {
 //  @desc     Delete logged in user's profile
 //  @access   Private
 //  @return   Nothing
-router.delete("", auth, async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   try {
     await Profile.findOneAndDelete({ user: req.user.id });
 
@@ -188,6 +188,19 @@ router.delete("", auth, async (req, res) => {
     console.log(err.message);
     res.status(500).json({ msg: "Server error" });
   }
+});
+
+//FOR DEVELOPMENT PURPOSES - DELETE IN PRODUCTION
+//  @route    DELETE api/posts
+//  @desc     Delete logged in user's profile
+//  @access   Private
+//  @return   Nothing
+router.delete("/:profile_id", auth, async (req, res) => {
+  await Profile.findByIdAndDelete(req.params.profile_id);
+
+  res.json({
+    msg: "Profile deleted"
+  });
 });
 
 module.exports = router;
