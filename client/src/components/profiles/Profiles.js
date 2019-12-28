@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { getProfiles } from "../../actions/profiles";
 import ProfileItem from "./ProfileItem";
 import { Redirect } from "react-router-dom";
+import Spinner from "../layout/Spinner";
 
 const Profiles = ({
   profiles,
@@ -22,10 +23,10 @@ const Profiles = ({
   return (
     <Fragment>
       <section id="profiles">
-        <div class="container ">
-          <div class="profiles">
+        <div className="container ">
+          <div className="profiles">
             {profiles === null || loading ? (
-              <h1 class="text-white text-lg">Loading....</h1>
+              <Spinner />
             ) : (
               <Fragment>
                 <h1 className="text-center text-lg text-white mb-2">

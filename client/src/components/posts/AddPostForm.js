@@ -2,9 +2,16 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { addPost } from "../../actions/posts";
 import { connect } from "react-redux";
-import { editPost } from "../../actions/posts";
+import { editPost, clearCurrent } from "../../actions/posts";
+import { setAlert } from "../../actions/alert";
 
-const AddPostForm = ({ addPost, editPost, posts: { current } }) => {
+const AddPostForm = ({
+  addPost,
+  editPost,
+  posts: { current },
+  setAlert,
+  clearCurrent
+}) => {
   useEffect(() => {
     if (current) {
       setText(current.text);
@@ -21,6 +28,7 @@ const AddPostForm = ({ addPost, editPost, posts: { current } }) => {
     if (current) {
       //Edit post
       editPost(text, current.id);
+      clearCurrent();
     } else {
       addPost(text);
     }
@@ -54,12 +62,19 @@ const AddPostForm = ({ addPost, editPost, posts: { current } }) => {
 
 AddPostForm.propTypes = {
   posts: PropTypes.array.isRequired,
+  clearCurrent: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired
+  editPost: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   posts: state.posts
 });
 
-export default connect(mapStateToProps, { addPost, editPost })(AddPostForm);
+export default connect(mapStateToProps, {
+  addPost,
+  editPost,
+  setAlert,
+  clearCurrent
+})(AddPostForm);

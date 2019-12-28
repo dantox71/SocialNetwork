@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
 const AlertItem = ({ alert }) => {
-  console.log(alert);
   return (
     <Fragment>
       <div className={`alert alert-${alert.type}`}>

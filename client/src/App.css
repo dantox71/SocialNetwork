@@ -42,8 +42,19 @@ input[type="submit"].btn-primary:hover,
   color: red;
 }
 
+.card {
+  margin-top: 20vh;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.card a {
+  color: black;
+}
+
 .text-black {
-  color: #000;
+  color: black;
 }
 
 .text-primary {
@@ -60,10 +71,6 @@ input[type="submit"].btn-primary:hover,
 
 .text-bold {
   font-weight: 900;
-}
-
-.text-center {
-  text-align: center;
 }
 
 .text-sm {
@@ -124,14 +131,6 @@ textarea:focus {
   margin-top: 2rem;
 }
 
-.mb-1 {
-  margin-bottom: 1rem;
-}
-
-.mb-2 {
-  margin-bottom: 2rem;
-}
-
 .mr-1 {
   margin-right: 1rem;
 }
@@ -174,22 +173,22 @@ textarea:focus {
 }
 
 .alerts {
-  z-index: 10000;
   position: fixed;
   top: 150px;
-  right: 0;
+  right: 50px;
+  z-index: 100;
 }
 
 .alert {
   position: relative;
-  z-index: 1000;
+  z-index: 100;
   background: #eee;
   color: white;
   padding: 0.5rem 1.5rem;
   margin: 1rem;
   border-radius: 5px;
   animation-name: show-alert;
-  animation-duration: 2.7s;
+  animation-duration: 1.5s;
   animation-fill-mode: forwards;
 }
 .alert-success {
@@ -220,11 +219,11 @@ textarea:focus {
 
 @media (max-width: 500px) {
   .alerts {
+    right: 15px;
     top: 60px;
   }
   .alert {
     top: 50px;
-    font-size: 14px;
   }
   .form {
     margin-top: 25vh;
@@ -239,10 +238,10 @@ textarea:focus {
 
 @media (max-width: 300px) {
   .alerts {
+    right: 0px;
     top: 90px;
   }
   .alert {
-    font-size: 10px;
     padding: 0.2rem 1rem;
   }
 }
@@ -251,17 +250,8 @@ textarea:focus {
   0% {
     right: -150px;
   }
-  25% {
-    right: 15px;
-    opacity: 1;
-  }
-
-  75% {
-    opacity: 1;
-  }
-
   100% {
-    opacity: 0;
+    right: 30px;
   }
 }
 
@@ -476,7 +466,7 @@ section#register:before {
   content: "";
   position: absolute;
   top: 0;
-  left: 0;
+  right: left;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
@@ -572,6 +562,7 @@ section#posts .container a {
 }
 
 .post {
+  color: black;
   border-bottom: 3px solid #9e2a12;
   margin: 2rem 0;
   z-index: 5;
@@ -591,6 +582,10 @@ section#posts .container a {
 .post .post-bottom {
   padding: 1.5rem 1.5rem;
   padding-bottom: 0;
+}
+
+.fa-edit {
+  color: blue;
 }
 .post .post-bottom .post-options {
   display: flex;
@@ -691,7 +686,7 @@ section#profiles {
 }
 section#profiles .container {
   z-index: 1000;
-  margin-top: 15vh;
+  margin-top: 10vh;
   background: #fff;
   color: #000;
 }
@@ -699,7 +694,7 @@ section#profiles .container a {
   color: #9e2a12;
 }
 section#profiles .container {
-  padding-top: 5rem;
+  padding-top: 3rem;
   background: transparent;
   text-align: center;
 }
@@ -710,22 +705,24 @@ section#profiles .container {
 
 .profile {
   text-align: left;
-  margin-bottom: 1rem;
+  margin: 0.5rem auto 1rem auto;
+  padding-bottom: 0.5rem;
   background: white;
   border-top: 3px solid #9e2a12;
   border-bottom: 3px soldi #9e2a12;
   color: #9e2a12;
   display: grid;
-  grid-gap: 2rem;
   grid-template-areas:
     "profile-top info links"
     "profile-top info links"
     "profile-top info links";
   align-items: center;
   justify-content: center;
+  width: 90%;
 }
-.profiles .profile .profile-top {
+.profile .profile-top {
   grid-area: profile-top;
+  margin-right: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -734,9 +731,11 @@ section#profiles .container {
 .profile .profile-info {
   justify-content: center;
   align-items: center;
+  align-items: center;
   grid-area: info;
   display: flex;
   flex-direction: column;
+  min-width: 230px;
 }
 .profile .profile-social-links {
   grid-area: links;
@@ -744,13 +743,13 @@ section#profiles .container {
   justify-content: center;
   align-items: center;
   font-size: 50px;
+  min-width: 230px;
 }
 .profile .profile-social-links a {
   margin: 0 0.5rem;
 }
 .profile img {
-  width: 170px;
-  margin: 1rem 0;
+  width: 180px;
 }
 
 @media (max-width: 850px) {
@@ -770,18 +769,47 @@ section#profiles .container {
       "links links links";
   }
   .profiles .profile .profile-top {
-    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
 }
 
-@media (max-height: 550px) {
-  body {
-    overflow-y: scroll;
-  }
-
-  section#home {
-    padding-top: 12vh;
-  }
+section#create-profile .container {
+  margin-top: 20vh;
+  color: #9e2a12;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+section#create-profile .container form {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+section#create-profile .container form .form-group {
+  display: flex;
+  justify-content: center;
+}
+section#create-profile .container form .form-group input {
+  color: #9e2a12;
+}
+section#create-profile .container form .form-group input::placeholder {
+  letter-spacing: 1px;
+  color: #777;
+}
+section#create-profile .container form .form-group .btn {
+  display: block;
+  border: 1px solid #9e2a12;
+}
+section#create-profile .container form .btn {
+  border: 1px solid #9e2a12;
+}
+section#create-profile .container form .social-links {
+  width: 70%;
 }
 
 *,
@@ -820,6 +848,13 @@ a:hover {
 
 ul {
   list-style: none;
+}
+
+.logo {
+  display: block;
+  border: 5px solid #9e2a12;
+  border-radius: 10px 35px 10px 10px;
+  padding: 0.5rem;
 }
 
 img {

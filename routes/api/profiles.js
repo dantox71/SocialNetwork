@@ -45,31 +45,6 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-//  @route    GET api/profiles/:user_id
-//  @desc     Get profile by user id
-//  @access   Private
-//  @return   profile that match specified id
-// router.get("/:user_id", auth, async (req, res) => {
-//   try {
-//     const profile = await Profile.findOne({
-//       user: req.params.user_id
-//     });
-
-//     if (!profile) {
-//       return res.status(404).json({ msg: "No profile for user with such id" });
-//     }
-
-//     res.json(profile);
-//   } catch (err) {
-//     if (err.kind === "ObjectId") {
-//       return res.status(404).json({ msg: "No profile for user with such id" });
-//     }
-
-//     console.log(err.message);
-//     res.status(500).json({ msg: "Server error" });
-//   }
-// });
-
 //  @route    GET api/profiles/:profile_id
 //  @desc     Get profile by it's id
 //  @access   Private
@@ -100,7 +75,9 @@ router.get("/:profile_id", auth, async (req, res) => {
 //  @access   Private
 //  @return   Created/Updated profile
 router.post("/", auth, async (req, res) => {
-  let profile = await Profile.findOne({ user: req.user.id });
+  let profile = await Profile.findOne({ user: req.user.id }).populate("user", [
+    "name"
+  ]);
 
   try {
     if (profile) {
@@ -121,10 +98,21 @@ router.post("/", auth, async (req, res) => {
       if (job) profile.job = job;
       if (status) profile.status = status;
 
-      if (instagram) profile.social.instagram = instagram;
-      if (facebook) profile.social.facebook = facebook;
-      if (youtube) profile.social.youtube = youtube;
-      if (linkedin) profile.social.linkedin = linkedin;
+      instagram
+        ? (profile.social.instagram = instagram)
+        : (profile.social.instagram = "");
+
+      facebook
+        ? (profile.social.facebook = facebook)
+        : (profile.social.facebook = "");
+
+      linkedin
+        ? (profile.social.linkedin = linkedin)
+        : (profile.social.linkedin = "");
+
+      youtube
+        ? (profile.social.youtube = youtube)
+        : (profile.social.youtube = "");
 
       profile.save();
       console.log("Profile edited");

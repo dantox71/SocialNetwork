@@ -2,6 +2,7 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   ADD_PROFILE,
+  EDIT_PROFILE,
   PROFILE_ERROR,
   CLEAR_PROFILE,
   GET_CURRENT_PROFILE,
@@ -31,6 +32,19 @@ export default function(state = initialState, action) {
         profiles: payload
       };
 
+    case ADD_PROFILE:
+      return {
+        ...state,
+
+        currentProfile: payload
+      };
+
+    // case EDIT_PROFILE:
+    //   return {
+    //     ...state,
+    //     currentProfile: payload
+    //   };
+
     case GET_CURRENT_PROFILE:
       return {
         ...state,
@@ -41,13 +55,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         currentProfile: null
-      };
-
-    case ADD_PROFILE:
-      return {
-        ...state,
-
-        currentProfile: payload
       };
 
     case PROFILE_ERROR:

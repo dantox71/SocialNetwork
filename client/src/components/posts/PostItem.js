@@ -2,6 +2,7 @@ import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import Moment from "react-moment";
 import { connect } from "react-redux";
+import Comments from "../comments/Comments";
 import {
   likePost,
   unlikePost,
@@ -105,99 +106,7 @@ const PostItem = ({
           </div>
         </div>
 
-        {/* <div class="comments">
-          <form class="add-comment">
-            <h3 class="text-primary">Add comment</h3>
-            <textarea name="addcomment" rows="5">
-              {" "}
-            </textarea>
-
-            <input type="submit" value="Add comment" class="btn  mt-1" />
-          </form>
-
-          <div class="comment">
-            <div class="comment-top">
-              <div class="d-flex-column">
-                <img
-                  src="https://avatars1.githubusercontent.com/u/53446414?s=460&v=4"
-                  alt=""
-                />
-                <div class="comment-menu mt-1">
-                  <a href="#edit-comment">
-                    <i class="fa fa-edit mr-1"></i>
-                  </a>
-                  <a href="#delete-comment">
-                    <i class="fa fa-times text-danger"></i>
-                  </a>
-                </div>
-              </div>
-
-              <div class="comment-info">
-                <a href="profile.html" class="author text-primary">
-                  Commented by <span class="text-bold"> Daniel Łagowski</span>
-                </a>
-                <p class="date text-gray text-sm">
-                  on{" "}
-                  <span class="text-bold">
-                    <Moment date={post.date} />
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            <div class="comment-bottom">
-              <p class="comment-text">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit,
-                quisquam tempora fuga ab ipsum ex culpa, dolor quo fugit
-                perferendis possimus illo, expedita quos numquam omnis eius.
-                Minima asperiores cum, repellat aliquam pariatur veniam adipisci
-                quibusdam amet numquam dolorum? Magni rem tempore temporibus
-                quidem quo eos mollitia ex quis obcaecati.
-              </p>
-            </div>
-          </div>
-
-          <div class="comment">
-            <div class="comment-top">
-              <div class="d-flex-column">
-                <img
-                  src="https://avatars1.githubusercontent.com/u/53446414?s=460&v=4"
-                  alt=""
-                />
-                <div class="comment-menu mt-1">
-                  <a href="#edit-comment">
-                    <i class="fa fa-edit mr-1"></i>
-                  </a>
-                  <a href="#delete-comment">
-                    <i class="fa fa-times text-danger"></i>
-                  </a>
-                </div>
-              </div>
-
-              <div class="comment-info">
-                <a href="profile.html" class="author text-primary">
-                  Commented by <span class="text-bold"> Daniel Łagowski</span>
-                </a>
-                <p class="date text-gray text-sm">
-                  on <span class="text-bold">2019-12-22</span>
-                </p>
-              </div>
-            </div>
-
-            <div class="comment-bottom">
-              <p class="comment-text">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit,
-                quisquam tempora fuga ab ipsum ex culpa, dolor quo fugit
-                perferendis possimus illo, expedita quos numquam omnis eius.
-                Minima asperiores cum, repellat aliquam pariatur veniam adipisci
-                quibusdam amet numquam dolorum? Magni rem tempore temporibus
-                quidem quo eos mollitia ex quis obcaecati.
-              </p>
-            </div>
-          </div>
-        </div>
-
-              */}
+        <Comments comments={post.comments} post_id={post._id} />
       </div>
     </Fragment>
   );

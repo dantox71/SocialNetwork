@@ -99,6 +99,10 @@ export const logout = () => dispatch => {
   dispatch({
     type: CLEAR_CURRENT_PROFILE
   });
+
+  dispatch({
+    type: CLEAR_PROFILE
+  });
 };
 
 export const clearErrors = () => dispatch => {

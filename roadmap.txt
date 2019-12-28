@@ -1,0 +1,5 @@
+So, editing profile is bugged.It crash whole application. Tommorow I'll 
+try do that in completely different way.
+I'm gonna create something like setCurrentProfile
+ and set it to currentProfile when 
+i click on edit profile button. I hope it'll work :) See you tommorow. :)

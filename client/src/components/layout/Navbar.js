@@ -99,7 +99,7 @@ const Navbar = ({
       <div className="brand">
         <Link to="/">
           <h1>
-            Post<span className="text-primary">Man</span>
+            <i className="fas fa-user-friends logo"></i>
           </h1>
         </Link>
       </div>

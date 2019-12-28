@@ -17,9 +17,9 @@ const Profile = ({
     }
   }, [user]);
 
-  // if (!isAuthenticated) {
-  //   return <Redirect to="/x" />;
-  // }
+  if (!isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Fragment>
@@ -42,42 +42,65 @@ const Profile = ({
                       src={profile.avatar}
                       alt="User's avatar"
                     />
-                    <Link class="text-center" to="/edit-profile">
-                      Edit Profile
-                    </Link>
+
+                    {profile.user._id == user._id && (
+                      <Link class="text-center" to="/edit-profile">
+                        Edit Profile
+                      </Link>
+                    )}
                   </div>
 
                   <div class="profile-info">
-                    <h2>{profile.user.name}</h2>
+                    <h2>{profile.user.name && profile.user.name}</h2>
 
                     <ul>
-                      <li>
-                        <i class="fa fa-map-marker"></i>Location:
-                        <span class="text-bold">{profile.location}</span>
-                      </li>
-                      <li>
-                        <i class="fa fa-heart"></i>Status:
-                        <span class="text-bold">{profile.status}</span>
-                      </li>
-                      <li>
-                        <i class="fa fa-briefcase"></i>Job:
-                        <span class="text-bold">{profile.job}</span>
-                      </li>
+                      {profile.location && (
+                        <li>
+                          <i class="fa fa-map-marker"></i>Location:
+                          <span class="text-bold">
+                            {profile.location && profile.location}
+                          </span>
+                        </li>
+                      )}
+
+                      {profile.status && (
+                        <li>
+                          <i class="fa fa-heart"></i>Status:
+                          <span class="text-bold">{profile.status}</span>
+                        </li>
+                      )}
+
+                      {profile.job && (
+                        <li>
+                          <i class="fa fa-briefcase"></i>Job:
+                          <span class="text-bold">{profile.job}</span>
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <div class="profile-social-links fb">
-                    <a href={profile.social.facebook}>
-                      <i class="fab fa-facebook fb"></i>
-                    </a>
-                    <a href={profile.social.instagram}>
-                      <i class="fab fa-instagram instagram"></i>
-                    </a>
-                    <a href={profile.social.linkedin}>
-                      <i class="fab fa-linkedin linkedin"></i>
-                    </a>
-                    <a href={profile.social.youtube}>
-                      <i class="fab fa-youtube yt"></i>
-                    </a>
+                    {profile.social && profile.social.facebook && (
+                      <a href={profile.social.facebook}>
+                        <i class="fab fa-facebook fb"></i>
+                      </a>
+                    )}
+
+                    {profile.social && profile.social.instagram && (
+                      <a href={profile.social.instagram}>
+                        <i class="fab fa-instagram instagram"></i>
+                      </a>
+                    )}
+
+                    {profile.social && profile.social.linkedin && (
+                      <a href={profile.social.linkedin}>
+                        <i class="fab fa-linkedin linkedin"></i>
+                      </a>
+                    )}
+                    {profile.social && profile.social.youtube && (
+                      <a href={profile.social.youtube}>
+                        <i class="fab fa-youtube yt"></i>
+                      </a>
+                    )}
                   </div>
                 </Fragment>
               )}

@@ -3,10 +3,12 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   ADD_PROFILE,
+  EDIT_PROFILE,
   PROFILE_ERROR,
   CLEAR_PROFILE,
   GET_CURRENT_PROFILE
 } from "./types";
+import { setAlert } from "./alert";
 
 export const getCurrentProfile = () => async dispatch => {
   try {
@@ -65,6 +67,7 @@ export const createProfile = formData => async dispatch => {
 
   try {
     const res = await axios.post("/api/profiles", body, config);
+    console.log(res.data);
 
     dispatch({
       type: ADD_PROFILE,
@@ -73,6 +76,27 @@ export const createProfile = formData => async dispatch => {
   } catch (err) {
     dispatch({
       type: PROFILE_ERROR
+    });
+  }
+};
+
+export const editProfile = formData => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify(formData);
+
+  try {
+    const res = await axios.post("/api/profiles", body, config);
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: errors
     });
   }
 };
