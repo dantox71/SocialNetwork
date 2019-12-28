@@ -12,7 +12,9 @@ import {
   COMMENT_POST,
   EDIT_COMMENT,
   REMOVE_COMMENT,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  SET_CURRENT_COMMENT,
+  CLEAR_CURRENT_COMMENT
 } from "./types";
 import { setAlert } from "./alert";
 
@@ -167,6 +169,100 @@ export const editPost = (text, post_id) => async dispatch => {
   }
 };
 
+export const commentPost = (text, post_id) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ text });
+
+  try {
+    const res = await axios.put(`api/posts/comment/${post_id}`, body, config);
+
+    dispatch({
+      type: COMMENT_POST,
+      payload: {
+        newPost: res.data,
+        post_id
+      }
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    dispatch({
+      type: POST_ERROR,
+      payload: errors
+    });
+  }
+};
+
+export const editComment = (text, post_id, comment_id) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  const body = JSON.stringify({ text });
+
+  try {
+    const res = await axios.put(
+      `/api/posts/comment/update/${post_id}/${comment_id}`,
+      body,
+      config
+    );
+
+    dispatch({
+      type: EDIT_COMMENT,
+      payload: {
+        newPost: res.data,
+        post_id
+      }
+    });
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    dispatch({
+      type: POST_ERROR,
+      payload: errors
+    });
+  }
+};
+
+export const removeComment = (post_id, comment_id) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
+
+  try {
+    if (window.confirm("Are you sure?")) {
+      const res = await axios.put(
+        `/api/posts/comment/${post_id}/${comment_id}`,
+        config
+      );
+
+      dispatch({
+        type: REMOVE_COMMENT,
+        payload: {
+          newPost: res.data,
+          post_id
+        }
+      });
+    }
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    dispatch({
+      type: POST_ERROR,
+      payload: errors
+    });
+  }
+};
+
 export const setCurrent = postData => dispatch => {
   dispatch({
     type: SET_CURRENT,
@@ -179,6 +275,20 @@ export const clearCurrent = () => dispatch => {
     type: CLEAR_CURRENT
   });
 };
+
+export const setCurrentComment = (text, comment_id) => dispatch => {
+  dispatch({
+    type: SET_CURRENT_COMMENT,
+    payload: { text, comment_id }
+  });
+};
+
+export const clearCurrentComment = () => dispatch => {
+  dispatch({
+    type: CLEAR_CURRENT_COMMENT
+  });
+};
+
 export const clearErrors = () => dispatch => {
   dispatch({
     type: CLEAR_ERRORS
