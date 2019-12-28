@@ -3,8 +3,8 @@ import spinner from "./spinner.gif";
 
 const Spinner = props => {
   return (
-    <div>
-      <h1 class="text-lg text-white ">Loading....</h1>
+    <div class="d-flex">
+      <h1 className="text-center">Loading....</h1>
     </div>
   );
 };

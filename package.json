@@ -4,10 +4,12 @@
   "description": "This is a very small social network for everyone",
   "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "dev-prepare": "concurrently \"npm install\" \"npm install --prefix client \"",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "heroku-postbukd": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",

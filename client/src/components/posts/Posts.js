@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { getPosts } from "../../actions/posts";
 import { connect } from "react-redux";
+import Spinner from "../layout/Spinner";
 import PostItem from "./PostItem";
 import { setAlert } from "../../actions/alert";
 import { clearErrors } from "../../actions/posts";
@@ -27,33 +28,35 @@ const Posts = ({
 
   return (
     <Fragment>
-      {isAuthenticated && currentProfile ? (
-        <AddPostForm />
-      ) : (
-        <div className="card">
-          <h1>
-            {isAuthenticated ? (
-              <Link to="/create-profile">
-                Create Profile <i className="fa fa-user-plus"></i>
-              </Link>
-            ) : (
-              <Fragment>
-                <Link to="/register">
-                  Create Account <i className="fa fa-sign-in-alt"></i>
-                </Link>{" "}
-              </Fragment>
-            )}
-          </h1>
-        </div>
-      )}
-
-      <div className="container">
-        {loading ? (
-          <h1 class="text-black">Loading...</h1>
+      <section id="posts">
+        {isAuthenticated && currentProfile ? (
+          <AddPostForm />
         ) : (
-          posts && posts.map(post => <PostItem key={post._id} post={post} />)
+          <div className="card">
+            <h1>
+              {isAuthenticated ? (
+                <Link to="/create-profile">
+                  Create Profile <i className="fa fa-user-plus"></i>
+                </Link>
+              ) : (
+                <Fragment>
+                  <Link to="/register">
+                    Create Account <i className="fa fa-sign-in-alt"></i>
+                  </Link>{" "}
+                </Fragment>
+              )}
+            </h1>
+          </div>
         )}
-      </div>
+
+        <div className="container">
+          {loading ? (
+            <Spinner />
+          ) : (
+            posts && posts.map(post => <PostItem key={post._id} post={post} />)
+          )}
+        </div>
+      </section>
     </Fragment>
   );
 };
