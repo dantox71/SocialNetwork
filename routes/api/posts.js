@@ -238,45 +238,119 @@ router.put("/unlike/:post_id", auth, async (req, res) => {
 //  @desc       comment on the post
 //  @access     Private
 //  @return     Array of comments
-router.put("/comment/:post_id", auth, async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.post_id);
-    const profile = await Profile.findOne({ user: req.user.id });
-    const user = await User.findById(req.user.id);
-    if (!post) {
-      return res
-        .status(404)
-        .json({ errors: [{ msg: "Post with this id doesn't exist" }] });
+router.put(
+  "/comment/:post_id",
+  [
+    auth,
+    [
+      check("text", "Text is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.post_id);
+      const profile = await Profile.findOne({ user: req.user.id });
+      const user = await User.findById(req.user.id);
+
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      if (!post) {
+        return res
+          .status(404)
+          .json({ errors: [{ msg: "Post with this id doesn't exist" }] });
+      }
+
+      if (!profile) {
+        return res
+          .status(404)
+          .json({ errors: [{ msg: "To comment you have to create profile" }] });
+      }
+
+      const comment = {
+        name: user.name,
+        user: profile.user,
+        avatar: profile.avatar,
+        text: req.body.text
+      };
+
+      post.comments.unshift(comment);
+
+      await post.save();
+
+      res.json(post);
+    } catch (err) {
+      if (err.kind == "ObjectId") {
+        return res
+          .status(404)
+          .json({ errors: [{ msg: "Post with such id not found" }] });
+      }
+
+      res.status(500).json({ msg: "Server error" });
     }
-
-    if (!profile) {
-      return res
-        .status(404)
-        .json({ msg: "To comment you have to create profile" });
-    }
-
-    const comment = {
-      name: user.name,
-      user: profile.user,
-      avatar: profile.avatar,
-      text: req.body.text
-    };
-
-    post.comments.unshift(comment);
-
-    await post.save();
-
-    res.json(post.comments);
-  } catch (err) {
-    if (err.kind == "ObjectId") {
-      return res
-        .status(404)
-        .json({ errors: [{ msg: "Post with such id not found" }] });
-    }
-
-    res.status(500).json({ msg: "Server error" });
   }
-});
+);
+
+//  @route      PUT api/posts/comment/update/:post_id/:comment_id
+//  @desc       Update comment by it's id
+//  @access     Private
+//  @return     Update comment comment
+router.put(
+  "/comment/update/:post_id/:comment_id",
+  [
+    auth,
+    [
+      check("text", "Text is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array() });
+      }
+
+      const post = await Post.findById(req.params.post_id);
+
+      //Check if post doesn't exist
+      if (!post) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Post with such id doesn't exist" }] });
+      }
+
+      const removeIndex = post.comments
+        .map(comment => comment._id)
+        .indexOf(req.params.comment_id);
+
+      if (removeIndex == -1) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Comment with such id doesn't exist" }] });
+      }
+
+
+      post.comments[removeIndex].text = req.body.text;
+
+
+      post.save();
+
+
+      res.send(post);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ msg: "Server error" });
+    }
+  }
+);
 
 //  @route      PUT api/posts/comment/:post_id/:comment_id
 //  @desc       Delete comment by it's id
@@ -287,7 +361,9 @@ router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
     const post = await Post.findById(req.params.post_id);
 
     if (!post) {
-      return res.status(404).json({ msg: "Post with this id not found" });
+      return res
+        .status(404)
+        .json({ errors: [{ msg: "Post with this id doesn't exist" }] });
     }
 
     const removeIndex = post.comments
@@ -296,7 +372,6 @@ router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
 
     // Check if authorized to delete comment
     if (post.comments[removeIndex].user.toString() !== req.user.id) {
-      return res;
       return res.status(401).json({ errors: [{ msg: "Not authorized" }] });
     }
 
@@ -304,7 +379,7 @@ router.put("/comment/:post_id/:comment_id", auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.comments);
+    res.json(post);
   } catch (err) {
     if (err.kind == "ObjectId") {
       return res
