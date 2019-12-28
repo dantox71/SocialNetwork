@@ -11,12 +11,15 @@ import {
   UNLIKE_POST,
   COMMENT_POST,
   EDIT_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  SET_CURRENT_COMMENT,
+  CLEAR_CURRENT_COMMENT
 } from "../actions/types";
 
 const initialState = {
   posts: [],
   current: null,
+  currentComment: null,
   loading: true,
   errors: []
 };
@@ -60,6 +63,38 @@ export default function(state = initialState, action) {
         )
       };
 
+    case UNLIKE_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.post_id ? payload.newPost : post
+        )
+      };
+
+    case COMMENT_POST:
+      return {
+        ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.post_id ? payload.newPost : post
+        )
+      };
+
+    case EDIT_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.post_id ? payload.newPost : post
+        )
+      };
+
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.post_id ? payload.newPost : post
+        )
+      };
+
     case SET_CURRENT:
       return {
         ...state,
@@ -72,12 +107,16 @@ export default function(state = initialState, action) {
         current: null
       };
 
-    case UNLIKE_POST:
+    case SET_CURRENT_COMMENT:
       return {
         ...state,
-        posts: state.posts.map(post =>
-          post._id === payload.post_id ? payload.newPost : post
-        )
+        currentComment: payload
+      };
+
+    case CLEAR_CURRENT_COMMENT:
+      return {
+        ...state,
+        currentComment: null
       };
 
     case CLEAR_ERRORS:
