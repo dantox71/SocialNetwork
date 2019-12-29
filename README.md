@@ -54,5 +54,5 @@ Here you can find my application :  [@SocialNetwork](http://dl-social-network.he
 
 ## Contact
 
-Created by [@Daniel Łagowski](daniellagowski.netlify.com/) - feel free to contact me!
+Created by [@Daniel Łagowski](https://daniellagowski.netlify.com/) - feel free to contact me!
 
